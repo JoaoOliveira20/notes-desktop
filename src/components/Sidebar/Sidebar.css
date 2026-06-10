@@ -1,0 +1,29 @@
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  padding: 16px;
+  border-right: 1px solid #ddd;
+  background: #f7f7f7;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-title {
+  margin: 0 0 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-button {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
