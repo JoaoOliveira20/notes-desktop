@@ -5,22 +5,32 @@ import { Sidebar } from "../../components/Sidebar/Sidebar";
 import { NoteEditor } from "../../components/NoteEditor/NoteEditor";
 
 export function HomePage() {
-  const [notes, setNotes] = useState<Note[]>(() => {
-    const storedNotes = localStorage.getItem("notes");
-
-    if (!storedNotes) {
-      return [];
-    }
-
-    return JSON.parse(storedNotes);
-  });
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [hasLoadedNotes, setHasLoadedNotes] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
 
-  const selectedNote = notes.find((note) => note.id === selectedNoteId);
+  const selectedNote = notes.find(
+    (note) => note.id === selectedNoteId
+  );
 
   useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
+    async function loadNotes() {
+      const loadedNotes = await window.electronAPI.loadNotes();
+
+      setNotes(loadedNotes);
+      setHasLoadedNotes(true);
+    }
+
+    loadNotes();
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedNotes) {
+      return;
+    }
+
+    window.electronAPI.saveNotes(notes);
+  }, [notes, hasLoadedNotes]);
 
   function createNote() {
     const newNote: Note = {
@@ -37,7 +47,7 @@ export function HomePage() {
       if (note.id === selectedNoteId) {
         return {
           ...note,
-          title: title,
+          title,
         };
       }
 
@@ -52,7 +62,7 @@ export function HomePage() {
       if (note.id === selectedNoteId) {
         return {
           ...note,
-          content: content,
+          content,
         };
       }
 
@@ -63,7 +73,11 @@ export function HomePage() {
   }
 
   function deleteNote() {
-    setNotes(notes.filter((note) => note.id !== selectedNoteId));
+    setNotes(
+      notes.filter(
+        (note) => note.id !== selectedNoteId
+      )
+    );
 
     setSelectedNoteId(null);
   }
