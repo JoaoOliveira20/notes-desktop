@@ -1,105 +1,21 @@
 import "./HomePage.css";
-import { useState, useEffect } from "react";
-import type { Note } from "../../types/Note";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 import { NoteEditor } from "../../components/NoteEditor/NoteEditor";
+import { useNotes } from "../../hooks/useNotes";
 
 export function HomePage() {
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [hasLoadedNotes, setHasLoadedNotes] = useState(false);
-  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
-
-  const selectedNote = notes.find((note) => note.id === selectedNoteId);
-
-  useEffect(() => {
-    async function loadNotes() {
-      const loadedNotes = await window.electronAPI.loadNotes();
-
-      setNotes(loadedNotes);
-
-      if (loadedNotes.length > 0) {
-        setSelectedNoteId(loadedNotes[0].id);
-      }
-
-      setHasLoadedNotes(true);
-    }
-
-    loadNotes();
-  }, []);
-
-  useEffect(() => {
-    if (!hasLoadedNotes) {
-      return;
-    }
-
-    window.electronAPI.saveNotes(notes);
-  }, [notes, hasLoadedNotes]);
-
-  function createNote() {
-    const newNote: Note = {
-      id: crypto.randomUUID(),
-      title: "Nova Nota",
-      content: "Escreva aqui...",
-    };
-
-    setNotes([...notes, newNote]);
-  }
-
-  async function exportNotes() {
-    await window.electronAPI.exportNotes(notes);
-  }
-
-  async function importNotes() {
-  const importedNotes = await window.electronAPI.importNotes();
-
-  if (!importedNotes) {
-    return;
-  }
-
-  setNotes(importedNotes);
-
-  if (importedNotes.length > 0) {
-    setSelectedNoteId(importedNotes[0].id);
-  } else {
-    setSelectedNoteId(null);
-  }
-}
-
-  function updateTitle(title: string) {
-    const updatedNotes = notes.map((note) => {
-      if (note.id === selectedNoteId) {
-        return {
-          ...note,
-          title,
-        };
-      }
-
-      return note;
-    });
-
-    setNotes(updatedNotes);
-  }
-
-  function updateContent(content: string) {
-    const updatedNotes = notes.map((note) => {
-      if (note.id === selectedNoteId) {
-        return {
-          ...note,
-          content,
-        };
-      }
-
-      return note;
-    });
-
-    setNotes(updatedNotes);
-  }
-
-  function deleteNote() {
-    setNotes(notes.filter((note) => note.id !== selectedNoteId));
-
-    setSelectedNoteId(null);
-  }
+  const {
+    notes,
+    selectedNote,
+    selectedNoteId,
+    setSelectedNoteId,
+    createNote,
+    exportNotes,
+    importNotes,
+    updateTitle,
+    updateContent,
+    deleteNote,
+  } = useNotes();
 
   return (
     <div className="home-page">
