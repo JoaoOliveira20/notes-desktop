@@ -8,6 +8,8 @@ declare global {
       getAppVersion: () => Promise<string>;
       saveNotes: (notes: Note[]) => Promise<void>;
       loadNotes: () => Promise<Note[]>;
+      exportNotes: (notes: Note[]) => Promise<void>;
+      importNotes: () => Promise<Note[] | null>;
     };
   }
 }

@@ -7,6 +7,8 @@ type SidebarProps = {
   selectedNoteId: string | null;
   onCreateNote: () => void;
   onSelectNote: (id: string) => void;
+  onExportNotes: () => void;
+  onImportNotes: () => void;
 };
 
 export function Sidebar({
@@ -14,6 +16,8 @@ export function Sidebar({
   selectedNoteId,
   onCreateNote,
   onSelectNote,
+  onExportNotes,
+  onImportNotes,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
@@ -21,6 +25,14 @@ export function Sidebar({
 
       <button className="sidebar-button" onClick={onCreateNote}>
         Nova Nota
+      </button>
+
+      <button className="sidebar-button" onClick={onImportNotes}>
+        Importar Backup
+      </button>
+
+      <button className="sidebar-button" onClick={onExportNotes}>
+        Exportar Backup
       </button>
 
       <div className="sidebar-list">

@@ -45,6 +45,26 @@ export function HomePage() {
     setNotes([...notes, newNote]);
   }
 
+  async function exportNotes() {
+    await window.electronAPI.exportNotes(notes);
+  }
+
+  async function importNotes() {
+  const importedNotes = await window.electronAPI.importNotes();
+
+  if (!importedNotes) {
+    return;
+  }
+
+  setNotes(importedNotes);
+
+  if (importedNotes.length > 0) {
+    setSelectedNoteId(importedNotes[0].id);
+  } else {
+    setSelectedNoteId(null);
+  }
+}
+
   function updateTitle(title: string) {
     const updatedNotes = notes.map((note) => {
       if (note.id === selectedNoteId) {
@@ -88,6 +108,8 @@ export function HomePage() {
         selectedNoteId={selectedNoteId}
         onCreateNote={createNote}
         onSelectNote={setSelectedNoteId}
+        onExportNotes={exportNotes}
+        onImportNotes={importNotes}
       />
 
       {selectedNote && (
