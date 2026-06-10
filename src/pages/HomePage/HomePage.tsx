@@ -9,15 +9,18 @@ export function HomePage() {
   const [hasLoadedNotes, setHasLoadedNotes] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
 
-  const selectedNote = notes.find(
-    (note) => note.id === selectedNoteId
-  );
+  const selectedNote = notes.find((note) => note.id === selectedNoteId);
 
   useEffect(() => {
     async function loadNotes() {
       const loadedNotes = await window.electronAPI.loadNotes();
 
       setNotes(loadedNotes);
+
+      if (loadedNotes.length > 0) {
+        setSelectedNoteId(loadedNotes[0].id);
+      }
+
       setHasLoadedNotes(true);
     }
 
@@ -73,11 +76,7 @@ export function HomePage() {
   }
 
   function deleteNote() {
-    setNotes(
-      notes.filter(
-        (note) => note.id !== selectedNoteId
-      )
-    );
+    setNotes(notes.filter((note) => note.id !== selectedNoteId));
 
     setSelectedNoteId(null);
   }
