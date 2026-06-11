@@ -5,7 +5,9 @@ import { useNotes } from "../../hooks/useNotes";
 
 export function HomePage() {
   const {
-    notes,
+    filteredNotes,
+    search,
+    setSearch,
     selectedNote,
     selectedNoteId,
     setSelectedNoteId,
@@ -20,8 +22,10 @@ export function HomePage() {
   return (
     <div className="home-page">
       <Sidebar
-        notes={notes}
+        notes={filteredNotes}
         selectedNoteId={selectedNoteId}
+        search={search}
+        onSearchChange={setSearch}
         onCreateNote={createNote}
         onSelectNote={setSelectedNoteId}
         onExportNotes={exportNotes}

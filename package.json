@@ -36,18 +36,18 @@
     "wait-on": "^9.0.10"
   },
   "build": {
-  "appId": "com.notesdesktop.app",
-  "productName": "Notes Desktop",
-  "files": [
-    "dist/**/*",
-    "electron/**/*",
-    "package.json"
-  ],
-  "directories": {
-    "output": "release"
-  },
-  "win": {
-    "target": "nsis"
+    "appId": "com.notesdesktop.app",
+    "productName": "Notes Desktop",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "build-release"
+    },
+    "win": {
+      "target": "nsis"
+    }
   }
-}
 }

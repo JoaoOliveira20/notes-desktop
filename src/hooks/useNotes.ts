@@ -5,8 +5,18 @@ export function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [hasLoadedNotes, setHasLoadedNotes] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
   const selectedNote = notes.find((note) => note.id === selectedNoteId);
+
+  const filteredNotes = notes.filter((note) => {
+    const searchText = search.toLowerCase();
+
+    return (
+      note.title.toLowerCase().includes(searchText) ||
+      note.content.toLowerCase().includes(searchText)
+    );
+  });
 
   useEffect(() => {
     async function loadNotes() {
@@ -36,7 +46,7 @@ export function useNotes() {
     const newNote: Note = {
       id: crypto.randomUUID(),
       title: "Nova Nota",
-      content: "Escreva aqui...",
+      content: "",
     };
 
     setNotes([...notes, newNote]);
@@ -109,5 +119,8 @@ export function useNotes() {
     updateTitle,
     updateContent,
     deleteNote,
+    search,
+    setSearch,
+    filteredNotes,
   };
 }

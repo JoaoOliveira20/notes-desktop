@@ -9,6 +9,8 @@ type SidebarProps = {
   onSelectNote: (id: string) => void;
   onExportNotes: () => void;
   onImportNotes: () => void;
+  search: string;
+  onSearchChange: (search: string) => void;
 };
 
 export function Sidebar({
@@ -18,6 +20,8 @@ export function Sidebar({
   onSelectNote,
   onExportNotes,
   onImportNotes,
+  search,
+  onSearchChange,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
@@ -34,6 +38,13 @@ export function Sidebar({
       <button className="sidebar-button" onClick={onExportNotes}>
         Exportar Backup
       </button>
+
+      <input
+        className="sidebar-search"
+        placeholder="Pesquisar notas..."
+        value={search}
+        onChange={(event) => onSearchChange(event.target.value)}
+      />
 
       <div className="sidebar-list">
         <NoteList

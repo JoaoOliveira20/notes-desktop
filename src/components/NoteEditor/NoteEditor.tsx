@@ -30,6 +30,7 @@ export function NoteEditor({
         onChange={(event) => {
           onUpdateContent(event.target.value);
         }}
+        placeholder="Escreva aqui..."
       />
 
       <button className="note-editor-delete" onClick={onDeleteNote}>
