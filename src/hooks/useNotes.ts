@@ -9,14 +9,18 @@ export function useNotes() {
 
   const selectedNote = notes.find((note) => note.id === selectedNoteId);
 
-  const filteredNotes = notes.filter((note) => {
-    const searchText = search.toLowerCase();
+  const filteredNotes = notes
+    .filter((note) => {
+      const searchText = search.toLowerCase();
 
-    return (
-      note.title.toLowerCase().includes(searchText) ||
-      note.content.toLowerCase().includes(searchText)
-    );
-  });
+      return (
+        note.title.toLowerCase().includes(searchText) ||
+        note.content.toLowerCase().includes(searchText)
+      );
+    })
+    .sort((a, b) => {
+      return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    });
 
   useEffect(() => {
     async function loadNotes() {
@@ -43,10 +47,14 @@ export function useNotes() {
   }, [notes, hasLoadedNotes]);
 
   function createNote() {
+    const now = new Date().toISOString();
+
     const newNote: Note = {
       id: crypto.randomUUID(),
       title: "Nova Nota",
       content: "",
+      createdAt: now,
+      updatedAt: now,
     };
 
     setNotes([...notes, newNote]);
@@ -79,6 +87,7 @@ export function useNotes() {
         return {
           ...note,
           title,
+          updatedAt: new Date().toISOString(),
         };
       }
 
@@ -94,6 +103,7 @@ export function useNotes() {
         return {
           ...note,
           content,
+          updatedAt: new Date().toISOString(),
         };
       }
 

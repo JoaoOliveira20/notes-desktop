@@ -33,3 +33,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.note-list-date {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #777;
+}

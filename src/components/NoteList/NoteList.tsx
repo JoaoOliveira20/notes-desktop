@@ -29,6 +29,12 @@ export function NoteList({
             {note.content.slice(0, 60)}
             {note.content.length > 60 ? "..." : ""}
           </p>
+
+          {note.createdAt && (
+            <small className="note-list-date">
+              Updated {new Date(note.updatedAt).toLocaleDateString()}
+            </small>
+          )}
         </div>
       ))}
     </div>
