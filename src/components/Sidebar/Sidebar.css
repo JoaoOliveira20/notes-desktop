@@ -57,3 +57,24 @@
   min-height: 0;
   overflow-y: auto;
 }
+
+.sidebar-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+
+  background: var(--bg-input);
+  color: var(--text-main);
+}
+
+.sidebar-tab.active {
+  background: var(--item-active);
+}

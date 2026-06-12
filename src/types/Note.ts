@@ -5,4 +5,5 @@ export type Note = {
   createdAt: string;
   updatedAt: string;
   pinned: boolean;
+  deleted: boolean;
 };

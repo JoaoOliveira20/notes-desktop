@@ -2,6 +2,7 @@ import "./Sidebar.css";
 import type { Note } from "../../types/Note";
 import { NoteList } from "../NoteList/NoteList";
 import type { ptBR } from "../../locales/pt-BR";
+import type { ViewMode } from "../../types/ViewMode";
 
 type Translations = typeof ptBR;
 
@@ -14,6 +15,8 @@ type SidebarProps = {
   onSearchChange: (search: string) => void;
   onOpenSettings: () => void;
   t: Translations;
+  viewMode: ViewMode;
+  onChangeViewMode: (viewMode: ViewMode) => void;
 };
 
 export function Sidebar({
@@ -25,6 +28,8 @@ export function Sidebar({
   onSearchChange,
   onOpenSettings,
   t,
+  viewMode,
+  onChangeViewMode,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
@@ -33,6 +38,26 @@ export function Sidebar({
       <button className="sidebar-button" onClick={onCreateNote}>
         {t.newNote}
       </button>
+
+      <div className="sidebar-tabs">
+        <button
+          className={
+            viewMode === "notes" ? "sidebar-tab active" : "sidebar-tab"
+          }
+          onClick={() => onChangeViewMode("notes")}
+        >
+          {t.notes}
+        </button>
+
+        <button
+          className={
+            viewMode === "trash" ? "sidebar-tab active" : "sidebar-tab"
+          }
+          onClick={() => onChangeViewMode("trash")}
+        >
+          {t.trash}
+        </button>
+      </div>
 
       <input
         className="sidebar-search"

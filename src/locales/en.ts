@@ -20,4 +20,12 @@ export const en = {
   cancel: "Cancel",
   emptyStateTitle: "No note selected",
   emptyStateMessage: "Create or select a note to get started.",
+  notes: "Notes",
+  trash: "Trash",
+  confirmMoveToTrashTitle: "Move note to trash?",
+  confirmMoveToTrashMessage: "You will be able to restore this note later.",
+  moveToTrash: "Move to trash",
+  confirmPermanentDeleteTitle: "Permanently delete note?",
+  confirmPermanentDeleteMessage: "This action cannot be undone.",
+  deletePermanently: "Delete permanently",
 };

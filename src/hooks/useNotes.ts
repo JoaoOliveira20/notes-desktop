@@ -6,10 +6,12 @@ export function useNotes() {
   const [hasLoadedNotes, setHasLoadedNotes] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const activeNotes = notes.filter((note) => !note.deleted);
+  const deletedNotes = notes.filter((note) => note.deleted);
 
   const selectedNote = notes.find((note) => note.id === selectedNoteId);
 
-  const filteredNotes = notes
+  const filteredNotes = activeNotes
     .filter((note) => {
       const searchText = search.toLowerCase();
 
@@ -60,6 +62,7 @@ export function useNotes() {
       createdAt: now,
       updatedAt: now,
       pinned: false,
+      deleted: false,
     };
 
     setNotes([...notes, newNote]);
@@ -133,7 +136,25 @@ export function useNotes() {
     setNotes(updatedNotes);
   }
 
-  function deleteNote() {
+  function moveNoteToTrash() {
+    const updatedNotes = notes.map((note) => {
+      if (note.id === selectedNoteId) {
+        return {
+          ...note,
+          deleted: true,
+          pinned: false,
+          updatedAt: new Date().toISOString(),
+        };
+      }
+
+      return note;
+    });
+
+    setNotes(updatedNotes);
+    setSelectedNoteId(null);
+  }
+
+  function permanentlyDeleteNote() {
     setNotes(notes.filter((note) => note.id !== selectedNoteId));
     setSelectedNoteId(null);
   }
@@ -148,10 +169,12 @@ export function useNotes() {
     importNotes,
     updateTitle,
     updateContent,
-    deleteNote,
     search,
     setSearch,
     filteredNotes,
     togglePin,
+    deletedNotes,
+    moveNoteToTrash,
+    permanentlyDeleteNote,
   };
 }

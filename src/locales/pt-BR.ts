@@ -1,6 +1,6 @@
 export const ptBR = {
   appName: "Notes Desktop",
-  newNote: "Nova Nota",
+  newNote: "Criar Nota",
   importBackup: "Importar Backup",
   exportBackup: "Exportar Backup",
   searchNotes: "Pesquisar notas...",
@@ -20,4 +20,12 @@ export const ptBR = {
   cancel: "Cancelar",
   emptyStateTitle: "Nenhuma nota selecionada",
   emptyStateMessage: "Crie ou selecione uma nota para começar.",
+  notes: "Notas",
+  trash: "Lixeira",
+  confirmMoveToTrashTitle: "Mover nota para a lixeira?",
+  confirmMoveToTrashMessage: "Você poderá restaurar essa nota depois.",
+  moveToTrash: "Mover para lixeira",
+  confirmPermanentDeleteTitle: "Excluir nota permanentemente?",
+  confirmPermanentDeleteMessage: "Essa ação não pode ser desfeita.",
+  deletePermanently: "Excluir permanentemente",
 };

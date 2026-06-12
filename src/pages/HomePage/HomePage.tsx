@@ -6,6 +6,7 @@ import { NoteEditor } from "../../components/NoteEditor/NoteEditor";
 import { SettingsModal } from "../../components/Modal/SettingsModal/SettingsModal";
 import { ConfirmModal } from "../../components/Modal/ConfirmModal/ConfirmModal";
 import { EmptyState } from "../../components/EmptyState/EmptyState";
+import type { ViewMode } from "../../types/ViewMode";
 
 import { useNotes } from "../../hooks/useNotes";
 import { useTheme } from "../../hooks/useTheme";
@@ -14,6 +15,7 @@ import { useLanguage } from "../../hooks/useLanguage";
 export function HomePage() {
   const {
     filteredNotes,
+    deletedNotes,
     search,
     setSearch,
     selectedNote,
@@ -24,7 +26,8 @@ export function HomePage() {
     importNotes,
     updateTitle,
     updateContent,
-    deleteNote,
+    moveNoteToTrash,
+    permanentlyDeleteNote,
     togglePin,
   } = useNotes();
 
@@ -32,17 +35,20 @@ export function HomePage() {
   const { language, toggleLanguage, t } = useLanguage();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("notes");
 
   return (
     <div className="home-page">
       <Sidebar
-        notes={filteredNotes}
+        notes={viewMode === "notes" ? filteredNotes : deletedNotes}
         selectedNoteId={selectedNoteId}
         search={search}
         onSearchChange={setSearch}
         onCreateNote={createNote}
         onSelectNote={setSelectedNoteId}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        viewMode={viewMode}
+        onChangeViewMode={setViewMode}
         t={t}
       />
 
@@ -73,13 +79,28 @@ export function HomePage() {
 
       <ConfirmModal
         isOpen={isDeleteModalOpen}
-        title={t.confirmDeleteTitle}
-        message={t.confirmDeleteMessage}
-        confirmLabel={t.confirmDelete}
+        title={
+          viewMode === "trash"
+            ? t.confirmPermanentDeleteTitle
+            : t.confirmMoveToTrashTitle
+        }
+        message={
+          viewMode === "trash"
+            ? t.confirmPermanentDeleteMessage
+            : t.confirmMoveToTrashMessage
+        }
+        confirmLabel={
+          viewMode === "trash" ? t.deletePermanently : t.moveToTrash
+        }
         cancelLabel={t.cancel}
         onCancel={() => setIsDeleteModalOpen(false)}
         onConfirm={() => {
-          deleteNote();
+          if (viewMode === "trash") {
+            permanentlyDeleteNote();
+          } else {
+            moveNoteToTrash();
+          }
+
           setIsDeleteModalOpen(false);
         }}
       />
