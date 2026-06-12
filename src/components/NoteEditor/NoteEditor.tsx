@@ -1,11 +1,16 @@
 import "./NoteEditor.css";
 import type { Note } from "../../types/Note";
+import type { ptBR } from "../../locales/pt-BR";
+
+type Translations = typeof ptBR;
 
 type NoteEditorProps = {
   selectedNote: Note;
   onUpdateTitle: (title: string) => void;
   onUpdateContent: (content: string) => void;
   onDeleteNote: () => void;
+  onTogglePin: () => void;
+  t: Translations;
 };
 
 export function NoteEditor({
@@ -13,6 +18,8 @@ export function NoteEditor({
   onUpdateTitle,
   onUpdateContent,
   onDeleteNote,
+  onTogglePin,
+  t,
 }: NoteEditorProps) {
   return (
     <div className="note-editor">
@@ -30,11 +37,15 @@ export function NoteEditor({
         onChange={(event) => {
           onUpdateContent(event.target.value);
         }}
-        placeholder="Escreva aqui..."
+        placeholder={t.emptyNotePlaceholder}
       />
 
+      <button onClick={onTogglePin}>
+        {selectedNote.pinned ? t.unpinNote : t.pinNote}
+      </button>
+
       <button className="note-editor-delete" onClick={onDeleteNote}>
-        Apagar Nota
+        {t.deleteNote}
       </button>
     </div>
   );

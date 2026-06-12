@@ -6,6 +6,9 @@
   flex-direction: column;
   gap: 16px;
   overflow: hidden;
+
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
 .note-editor-input {
@@ -15,6 +18,9 @@
   border: none;
   outline: none;
   flex-shrink: 0;
+
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
 .note-editor-textarea {
@@ -27,10 +33,28 @@
   font-family: inherit;
   line-height: 1.5;
   overflow-y: auto;
+
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+.note-editor-textarea::placeholder {
+  color: var(--text-muted);
 }
 
 .note-editor-delete {
   width: fit-content;
-  padding: 8px 12px;
+  padding: 10px 14px;
   flex-shrink: 0;
+
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.note-editor-delete:hover {
+  background: var(--danger-hover);
 }

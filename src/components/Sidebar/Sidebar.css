@@ -2,8 +2,9 @@
   width: 280px;
   height: 100vh;
   padding: 16px;
-  border-right: 1px solid #ddd;
-  background: #f7f7f7;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-sidebar);
+  color: var(--text-main);
 
   display: flex;
   flex-direction: column;
@@ -17,20 +18,42 @@
 
 .sidebar-button {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+
+  background: var(--button-bg);
+  color: var(--button-text);
+}
+
+.sidebar-button:hover {
+  background: var(--button-hover);
+}
+
+.sidebar-search {
+  width: 100%;
+  padding: 10px 12px;
   margin-bottom: 16px;
   flex-shrink: 0;
+
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  outline: none;
+
+  background: var(--bg-input);
+  color: var(--text-main);
+}
+
+.sidebar-search::placeholder {
+  color: var(--text-muted);
 }
 
 .sidebar-list {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-}
-
-.sidebar-search {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 16px;
-  flex-shrink: 0;
 }

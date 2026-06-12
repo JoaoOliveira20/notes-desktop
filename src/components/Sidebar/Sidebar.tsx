@@ -1,16 +1,19 @@
 import "./Sidebar.css";
 import type { Note } from "../../types/Note";
 import { NoteList } from "../NoteList/NoteList";
+import type { ptBR } from "../../locales/pt-BR";
+
+type Translations = typeof ptBR;
 
 type SidebarProps = {
   notes: Note[];
   selectedNoteId: string | null;
   onCreateNote: () => void;
   onSelectNote: (id: string) => void;
-  onExportNotes: () => void;
-  onImportNotes: () => void;
   search: string;
   onSearchChange: (search: string) => void;
+  onOpenSettings: () => void;
+  t: Translations;
 };
 
 export function Sidebar({
@@ -18,30 +21,22 @@ export function Sidebar({
   selectedNoteId,
   onCreateNote,
   onSelectNote,
-  onExportNotes,
-  onImportNotes,
   search,
   onSearchChange,
+  onOpenSettings,
+  t,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
-      <h1 className="sidebar-title">Notes Desktop</h1>
+      <h1 className="sidebar-title">{t.appName}</h1>
 
       <button className="sidebar-button" onClick={onCreateNote}>
-        Nova Nota
-      </button>
-
-      <button className="sidebar-button" onClick={onImportNotes}>
-        Importar Backup
-      </button>
-
-      <button className="sidebar-button" onClick={onExportNotes}>
-        Exportar Backup
+        {t.newNote}
       </button>
 
       <input
         className="sidebar-search"
-        placeholder="Pesquisar notas..."
+        placeholder={t.searchNotes}
         value={search}
         onChange={(event) => onSearchChange(event.target.value)}
       />
@@ -51,8 +46,13 @@ export function Sidebar({
           notes={notes}
           selectedNoteId={selectedNoteId}
           onSelectNote={onSelectNote}
+          t={t}
         />
       </div>
+
+      <button className="sidebar-button" onClick={onOpenSettings}>
+        {t.settings}
+      </button>
     </aside>
   );
 }

@@ -19,6 +19,10 @@ export function useNotes() {
       );
     })
     .sort((a, b) => {
+      if (a.pinned !== b.pinned) {
+        return a.pinned ? -1 : 1;
+      }
+
       return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
     });
 
@@ -55,10 +59,26 @@ export function useNotes() {
       content: "",
       createdAt: now,
       updatedAt: now,
+      pinned: false,
     };
 
     setNotes([...notes, newNote]);
     setSelectedNoteId(newNote.id);
+  }
+
+  function togglePin() {
+    const updatedNotes = notes.map((note) => {
+      if (note.id === selectedNoteId) {
+        return {
+          ...note,
+          pinned: !note.pinned,
+        };
+      }
+
+      return note;
+    });
+
+    setNotes(updatedNotes);
   }
 
   async function exportNotes() {
@@ -132,5 +152,6 @@ export function useNotes() {
     search,
     setSearch,
     filteredNotes,
+    togglePin,
   };
 }

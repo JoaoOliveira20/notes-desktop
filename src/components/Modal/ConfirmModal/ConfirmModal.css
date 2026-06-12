@@ -1,0 +1,52 @@
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.confirm-modal {
+  width: 420px;
+  padding: 20px;
+  border-radius: 10px;
+
+  background: var(--bg-main);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.confirm-modal h2 {
+  margin: 0 0 12px;
+}
+
+.confirm-modal p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.confirm-modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.confirm-modal-actions button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirm-modal-danger {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.confirm-modal-danger:hover {
+  background: var(--danger-hover);
+}
