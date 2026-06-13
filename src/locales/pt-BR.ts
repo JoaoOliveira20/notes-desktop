@@ -28,4 +28,9 @@ export const ptBR = {
   confirmPermanentDeleteTitle: "Excluir nota permanentemente?",
   confirmPermanentDeleteMessage: "Essa ação não pode ser desfeita.",
   deletePermanently: "Excluir permanentemente",
+  restoreNote: "Restaurar Nota",
+  emptyTrash: "Esvaziar Lixeira",
+  emptyTrashTitle: "Esvaziar lixeira?",
+  emptyTrashMessage:
+    "Todas as notas da lixeira serão excluídas permanentemente.",
 };

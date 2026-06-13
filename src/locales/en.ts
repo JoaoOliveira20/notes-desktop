@@ -28,4 +28,8 @@ export const en = {
   confirmPermanentDeleteTitle: "Permanently delete note?",
   confirmPermanentDeleteMessage: "This action cannot be undone.",
   deletePermanently: "Delete permanently",
+  restoreNote: "Restore Note",
+  emptyTrash: "Empty Trash",
+  emptyTrashTitle: "Empty trash?",
+  emptyTrashMessage: "All notes in the trash will be permanently deleted.",
 };

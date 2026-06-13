@@ -29,6 +29,9 @@ export function HomePage() {
     moveNoteToTrash,
     permanentlyDeleteNote,
     togglePin,
+    restoreNote,
+    emptyTrash,
+    filteredDeletedNotes,
   } = useNotes();
 
   const { theme, toggleTheme } = useTheme();
@@ -36,29 +39,54 @@ export function HomePage() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("notes");
+  const [isEmptyTrashModalOpen, setIsEmptyTrashModalOpen] = useState(false);
+
+  const visibleSelectedNote =
+    selectedNote && selectedNote.deleted === (viewMode === "trash")
+      ? selectedNote
+      : null;
+
+  function handleCreateNote() {
+    setViewMode("notes");
+    createNote();
+  }
+
+  function handleRestoreNote() {
+    restoreNote();
+    setViewMode("notes");
+  }
+
+  function handleChangeViewMode(newViewMode: ViewMode) {
+    setViewMode(newViewMode);
+    setSelectedNoteId(null);
+  }
 
   return (
     <div className="home-page">
       <Sidebar
-        notes={viewMode === "notes" ? filteredNotes : deletedNotes}
+        notes={viewMode === "notes" ? filteredNotes : filteredDeletedNotes}
         selectedNoteId={selectedNoteId}
         search={search}
         onSearchChange={setSearch}
-        onCreateNote={createNote}
+        onCreateNote={handleCreateNote}
         onSelectNote={setSelectedNoteId}
         onOpenSettings={() => setIsSettingsOpen(true)}
         viewMode={viewMode}
-        onChangeViewMode={setViewMode}
+        onChangeViewMode={handleChangeViewMode}
+        onEmptyTrash={() => setIsEmptyTrashModalOpen(true)}
+        hasDeletedNotes={deletedNotes.length > 0}
         t={t}
       />
 
-      {selectedNote ? (
+      {visibleSelectedNote ? (
         <NoteEditor
-          selectedNote={selectedNote}
+          selectedNote={visibleSelectedNote}
+          viewMode={viewMode}
           onUpdateTitle={updateTitle}
           onUpdateContent={updateContent}
           onDeleteNote={() => setIsDeleteModalOpen(true)}
           onTogglePin={togglePin}
+          onRestoreNote={handleRestoreNote}
           t={t}
         />
       ) : (
@@ -102,6 +130,19 @@ export function HomePage() {
           }
 
           setIsDeleteModalOpen(false);
+        }}
+      />
+
+      <ConfirmModal
+        isOpen={isEmptyTrashModalOpen}
+        title={t.emptyTrashTitle}
+        message={t.emptyTrashMessage}
+        confirmLabel={t.emptyTrash}
+        cancelLabel={t.cancel}
+        onCancel={() => setIsEmptyTrashModalOpen(false)}
+        onConfirm={() => {
+          emptyTrash();
+          setIsEmptyTrashModalOpen(false);
         }}
       />
     </div>

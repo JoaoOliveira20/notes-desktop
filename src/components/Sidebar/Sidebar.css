@@ -78,3 +78,17 @@
 .sidebar-tab.active {
   background: var(--item-active);
 }
+
+.sidebar-danger-button {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.sidebar-danger-button:hover {
+  background: var(--danger-hover);
+}
+
+.sidebar-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

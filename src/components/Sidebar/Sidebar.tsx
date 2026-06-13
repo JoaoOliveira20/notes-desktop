@@ -17,6 +17,8 @@ type SidebarProps = {
   t: Translations;
   viewMode: ViewMode;
   onChangeViewMode: (viewMode: ViewMode) => void;
+  onEmptyTrash: () => void;
+  hasDeletedNotes: boolean;
 };
 
 export function Sidebar({
@@ -30,6 +32,8 @@ export function Sidebar({
   t,
   viewMode,
   onChangeViewMode,
+  onEmptyTrash,
+  hasDeletedNotes,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
@@ -58,6 +62,16 @@ export function Sidebar({
           {t.trash}
         </button>
       </div>
+
+      {viewMode === "trash" && (
+        <button
+          className="sidebar-button sidebar-danger-button"
+          onClick={onEmptyTrash}
+          disabled={!hasDeletedNotes}
+        >
+          {t.emptyTrash}
+        </button>
+      )}
 
       <input
         className="sidebar-search"
