@@ -33,4 +33,12 @@ export const ptBR = {
   emptyTrashTitle: "Esvaziar lixeira?",
   emptyTrashMessage:
     "Todas as notas da lixeira serão excluídas permanentemente.",
+  selectAll: "Selecionar tudo",
+  clearSelection: "Limpar seleção",
+  restoreSelected: "Restaurar selecionadas",
+  deleteSelected: "Excluir selecionadas",
+  selectedNotes: "nota(s) selecionada(s)",
+  confirmDeleteSelectedTitle: "Excluir notas selecionadas?",
+  confirmDeleteSelectedMessage:
+    "Esta ação irá excluir permanentemente as notas selecionadas. Esta ação não poderá ser desfeita.",
 };

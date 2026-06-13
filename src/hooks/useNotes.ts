@@ -41,6 +41,30 @@ export function useNotes() {
       return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
     });
 
+  function restoreSelectedNotes(noteIds: string[]) {
+    const now = new Date().toISOString();
+
+    const updatedNotes = notes.map((note) => {
+      if (noteIds.includes(note.id)) {
+        return {
+          ...note,
+          deleted: false,
+          updatedAt: now,
+        };
+      }
+
+      return note;
+    });
+
+    setNotes(updatedNotes);
+    setSelectedNoteId(null);
+  }
+
+  function permanentlyDeleteSelectedNotes(noteIds: string[]) {
+    setNotes(notes.filter((note) => !noteIds.includes(note.id)));
+    setSelectedNoteId(null);
+  }
+
   useEffect(() => {
     async function loadNotes() {
       const loadedNotes = await window.electronAPI.loadNotes();
@@ -214,5 +238,7 @@ export function useNotes() {
     permanentlyDeleteNote,
     restoreNote,
     emptyTrash,
+    restoreSelectedNotes,
+    permanentlyDeleteSelectedNotes,
   };
 }

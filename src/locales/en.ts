@@ -32,4 +32,12 @@ export const en = {
   emptyTrash: "Empty Trash",
   emptyTrashTitle: "Empty trash?",
   emptyTrashMessage: "All notes in the trash will be permanently deleted.",
+  selectAll: "Select all",
+  clearSelection: "Clear selection",
+  restoreSelected: "Restore selected",
+  deleteSelected: "Delete selected",
+  selectedNotes: "selected note(s)",
+  confirmDeleteSelectedTitle: "Delete selected notes?",
+  confirmDeleteSelectedMessage:
+    "This action will permanently delete the selected notes. This cannot be undone.",
 };

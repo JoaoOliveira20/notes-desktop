@@ -32,6 +32,8 @@ export function HomePage() {
     restoreNote,
     emptyTrash,
     filteredDeletedNotes,
+    restoreSelectedNotes,
+    permanentlyDeleteSelectedNotes,
   } = useNotes();
 
   const { theme, toggleTheme } = useTheme();
@@ -40,6 +42,11 @@ export function HomePage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("notes");
   const [isEmptyTrashModalOpen, setIsEmptyTrashModalOpen] = useState(false);
+  const [selectedTrashNoteIds, setSelectedTrashNoteIds] = useState<string[]>(
+    [],
+  );
+  const [isDeleteSelectedModalOpen, setIsDeleteSelectedModalOpen] =
+    useState(false);
 
   const visibleSelectedNote =
     selectedNote && selectedNote.deleted === (viewMode === "trash")
@@ -59,6 +66,36 @@ export function HomePage() {
   function handleChangeViewMode(newViewMode: ViewMode) {
     setViewMode(newViewMode);
     setSelectedNoteId(null);
+    setSelectedTrashNoteIds([]);
+  }
+
+  function handleToggleTrashNoteSelection(noteId: string) {
+    setSelectedTrashNoteIds((currentSelectedIds) => {
+      if (currentSelectedIds.includes(noteId)) {
+        return currentSelectedIds.filter((id) => id !== noteId);
+      }
+
+      return [...currentSelectedIds, noteId];
+    });
+  }
+
+  function handleSelectAllTrashNotes() {
+    setSelectedTrashNoteIds(filteredDeletedNotes.map((note) => note.id));
+  }
+
+  function handleClearTrashSelection() {
+    setSelectedTrashNoteIds([]);
+  }
+
+  function handleRestoreSelectedNotes() {
+    restoreSelectedNotes(selectedTrashNoteIds);
+    setSelectedTrashNoteIds([]);
+    setViewMode("notes");
+  }
+
+  function handlePermanentlyDeleteSelectedNotes() {
+    permanentlyDeleteSelectedNotes(selectedTrashNoteIds);
+    setSelectedTrashNoteIds([]);
   }
 
   return (
@@ -75,6 +112,18 @@ export function HomePage() {
         onChangeViewMode={handleChangeViewMode}
         onEmptyTrash={() => setIsEmptyTrashModalOpen(true)}
         hasDeletedNotes={deletedNotes.length > 0}
+        selectedTrashNoteIds={selectedTrashNoteIds}
+        onToggleTrashNoteSelection={handleToggleTrashNoteSelection}
+        onSelectAllTrashNotes={handleSelectAllTrashNotes}
+        onClearTrashSelection={handleClearTrashSelection}
+        onRestoreSelectedNotes={handleRestoreSelectedNotes}
+        onPermanentlyDeleteSelectedNotes={() => {
+          if (selectedTrashNoteIds.length === 0) {
+            return;
+          }
+
+          setIsDeleteSelectedModalOpen(true);
+        }}
         t={t}
       />
 
@@ -142,7 +191,21 @@ export function HomePage() {
         onCancel={() => setIsEmptyTrashModalOpen(false)}
         onConfirm={() => {
           emptyTrash();
+          setSelectedTrashNoteIds([]);
           setIsEmptyTrashModalOpen(false);
+        }}
+      />
+
+      <ConfirmModal
+        isOpen={isDeleteSelectedModalOpen}
+        title={t.confirmDeleteSelectedTitle}
+        message={t.confirmDeleteSelectedMessage}
+        confirmLabel={t.deleteSelected}
+        cancelLabel={t.cancel}
+        onCancel={() => setIsDeleteSelectedModalOpen(false)}
+        onConfirm={() => {
+          handlePermanentlyDeleteSelectedNotes();
+          setIsDeleteSelectedModalOpen(false);
         }}
       />
     </div>

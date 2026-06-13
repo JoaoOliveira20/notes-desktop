@@ -19,6 +19,12 @@ type SidebarProps = {
   onChangeViewMode: (viewMode: ViewMode) => void;
   onEmptyTrash: () => void;
   hasDeletedNotes: boolean;
+  selectedTrashNoteIds: string[];
+  onToggleTrashNoteSelection: (noteId: string) => void;
+  onSelectAllTrashNotes: () => void;
+  onClearTrashSelection: () => void;
+  onRestoreSelectedNotes: () => void;
+  onPermanentlyDeleteSelectedNotes: () => void;
 };
 
 export function Sidebar({
@@ -34,6 +40,12 @@ export function Sidebar({
   onChangeViewMode,
   onEmptyTrash,
   hasDeletedNotes,
+  selectedTrashNoteIds,
+  onToggleTrashNoteSelection,
+  onSelectAllTrashNotes,
+  onClearTrashSelection,
+  onRestoreSelectedNotes,
+  onPermanentlyDeleteSelectedNotes,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
@@ -73,6 +85,49 @@ export function Sidebar({
         </button>
       )}
 
+      {viewMode === "trash" && hasDeletedNotes && (
+        <div className="sidebar-trash-actions">
+          <div className="sidebar-trash-selection-actions">
+            <button
+              className="sidebar-small-button"
+              onClick={onSelectAllTrashNotes}
+            >
+              {t.selectAll}
+            </button>
+
+            <button
+              className="sidebar-small-button"
+              onClick={onClearTrashSelection}
+              disabled={selectedTrashNoteIds.length === 0}
+            >
+              {t.clearSelection}
+            </button>
+          </div>
+
+          <button
+            className="sidebar-button"
+            onClick={onRestoreSelectedNotes}
+            disabled={selectedTrashNoteIds.length === 0}
+          >
+            {t.restoreSelected}
+          </button>
+
+          <button
+            className="sidebar-button sidebar-danger-button"
+            onClick={onPermanentlyDeleteSelectedNotes}
+            disabled={selectedTrashNoteIds.length === 0}
+          >
+            {t.deleteSelected}
+          </button>
+
+          {selectedTrashNoteIds.length > 0 && (
+            <small className="sidebar-selected-count">
+              {selectedTrashNoteIds.length} {t.selectedNotes}
+            </small>
+          )}
+        </div>
+      )}
+
       <input
         className="sidebar-search"
         placeholder={t.searchNotes}
@@ -85,6 +140,9 @@ export function Sidebar({
           notes={notes}
           selectedNoteId={selectedNoteId}
           onSelectNote={onSelectNote}
+          viewMode={viewMode}
+          selectedTrashNoteIds={selectedTrashNoteIds}
+          onToggleTrashNoteSelection={onToggleTrashNoteSelection}
           t={t}
         />
       </div>

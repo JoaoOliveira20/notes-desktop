@@ -92,3 +92,40 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.sidebar-trash-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-trash-selection-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebar-small-button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--button-bg);
+  color: var(--button-text);
+}
+
+.sidebar-small-button:hover {
+  background: var(--button-hover);
+}
+
+.sidebar-small-button:disabled,
+.sidebar-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sidebar-selected-count {
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: center;
+}

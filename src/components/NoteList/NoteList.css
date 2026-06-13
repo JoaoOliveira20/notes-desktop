@@ -46,3 +46,8 @@
   font-size: 12px;
   color: var(--text-muted);
 }
+
+.note-list-checkbox {
+  margin-bottom: 8px;
+  cursor: pointer;
+}

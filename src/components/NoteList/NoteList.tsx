@@ -1,6 +1,7 @@
 import "./NoteList.css";
 import type { Note } from "../../types/Note";
 import type { ptBR } from "../../locales/pt-BR";
+import type { ViewMode } from "../../types/ViewMode";
 
 type Translations = typeof ptBR;
 
@@ -8,6 +9,9 @@ type NoteListProps = {
   notes: Note[];
   selectedNoteId: string | null;
   onSelectNote: (id: string) => void;
+  viewMode: ViewMode;
+  selectedTrashNoteIds: string[];
+  onToggleTrashNoteSelection: (noteId: string) => void;
   t: Translations;
 };
 
@@ -15,6 +19,9 @@ export function NoteList({
   notes,
   selectedNoteId,
   onSelectNote,
+  viewMode,
+  selectedTrashNoteIds,
+  onToggleTrashNoteSelection,
   t,
 }: NoteListProps) {
   return (
@@ -31,6 +38,19 @@ export function NoteList({
                 : "note-list-item"
           }
         >
+          {viewMode === "trash" && (
+            <input
+              type="checkbox"
+              className="note-list-checkbox"
+              checked={selectedTrashNoteIds.includes(note.id)}
+              onChange={(event) => {
+                event.stopPropagation();
+                onToggleTrashNoteSelection(note.id);
+              }}
+              onClick={(event) => event.stopPropagation()}
+            />
+          )}
+
           <h3 className="note-list-title">
             {note.pinned ? "📌 " : ""}
             {note.title}
