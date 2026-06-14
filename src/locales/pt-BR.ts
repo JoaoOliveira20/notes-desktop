@@ -51,4 +51,5 @@ export const ptBR = {
   confirmDeleteCategoryTitle: "Apagar categoria?",
   confirmDeleteCategoryMessage:
     "As notas desta categoria não serão apagadas. Elas ficarão como sem categoria.",
+  category: "Categoria",
 };

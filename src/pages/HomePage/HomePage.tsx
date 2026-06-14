@@ -39,6 +39,7 @@ export function HomePage() {
     changeSelectedCategory,
     createCategory,
     deleteCategory,
+    updateNoteCategory,
   } = useNotes();
 
   const { theme, toggleTheme } = useTheme();
@@ -149,8 +150,10 @@ export function HomePage() {
         <NoteEditor
           selectedNote={visibleSelectedNote}
           viewMode={viewMode}
+          categories={categories}
           onUpdateTitle={updateTitle}
           onUpdateContent={updateContent}
+          onUpdateCategory={updateNoteCategory}
           onDeleteNote={() => setIsDeleteModalOpen(true)}
           onTogglePin={togglePin}
           onRestoreNote={handleRestoreNote}

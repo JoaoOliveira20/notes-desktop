@@ -50,4 +50,5 @@ export const en = {
   confirmDeleteCategoryTitle: "Delete category?",
   confirmDeleteCategoryMessage:
     "Notes in this category will not be deleted. They will become uncategorized.",
+  category: "Category",
 };

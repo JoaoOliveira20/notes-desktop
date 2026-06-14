@@ -2,14 +2,17 @@ import "./NoteEditor.css";
 import type { Note } from "../../types/Note";
 import type { ptBR } from "../../locales/pt-BR";
 import type { ViewMode } from "../../types/ViewMode";
+import type { Category } from "../../types/Category";
 
 type Translations = typeof ptBR;
 
 type NoteEditorProps = {
   selectedNote: Note;
   viewMode: ViewMode;
+  categories: Category[];
   onUpdateTitle: (title: string) => void;
   onUpdateContent: (content: string) => void;
+  onUpdateCategory: (categoryId: string | null) => void;
   onDeleteNote: () => void;
   onTogglePin: () => void;
   onRestoreNote: () => void;
@@ -20,10 +23,12 @@ export function NoteEditor({
   selectedNote,
   onUpdateTitle,
   onUpdateContent,
+  onUpdateCategory,
   onDeleteNote,
   onTogglePin,
   viewMode,
   onRestoreNote,
+  categories,
   t,
 }: NoteEditorProps) {
   return (
@@ -35,6 +40,28 @@ export function NoteEditor({
           onUpdateTitle(event.target.value);
         }}
       />
+
+      {viewMode === "notes" && (
+        <div className="note-editor-category">
+          <label>{t.category}</label>
+
+          <select
+            value={selectedNote.categoryId ?? ""}
+            onChange={(event) => {
+              const categoryId = event.target.value || null;
+              onUpdateCategory(categoryId);
+            }}
+          >
+            <option value="">{t.uncategorized}</option>
+
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <textarea
         className="note-editor-textarea"
