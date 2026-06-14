@@ -1,4 +1,4 @@
-import type { Note } from "./Note";
+import type { NotesData } from "./NotesData";
 
 export {};
 
@@ -6,10 +6,12 @@ declare global {
   interface Window {
     electronAPI: {
       getAppVersion: () => Promise<string>;
-      saveNotes: (notes: Note[]) => Promise<void>;
-      loadNotes: () => Promise<Note[]>;
-      exportNotes: (notes: Note[]) => Promise<void>;
-      importNotes: () => Promise<Note[] | null>;
+
+      saveNotesData: (data: NotesData) => Promise<void>;
+      loadNotesData: () => Promise<NotesData>;
+
+      exportNotesData: (data: NotesData) => Promise<void>;
+      importNotesData: () => Promise<NotesData | null>;
     };
   }
 }

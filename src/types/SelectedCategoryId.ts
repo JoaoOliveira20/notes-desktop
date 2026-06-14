@@ -1,0 +1,1 @@
+export type SelectedCategoryId = string | null | "all";

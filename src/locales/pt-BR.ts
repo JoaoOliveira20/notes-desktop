@@ -41,4 +41,14 @@ export const ptBR = {
   confirmDeleteSelectedTitle: "Excluir notas selecionadas?",
   confirmDeleteSelectedMessage:
     "Esta ação irá excluir permanentemente as notas selecionadas. Esta ação não poderá ser desfeita.",
+  categories: "Categorias",
+  allNotes: "Todas",
+  uncategorized: "Sem categoria",
+  newCategory: "Nova categoria",
+  createCategory: "Criar categoria",
+  categoryNamePlaceholder: "Nome da categoria",
+  deleteCategory: "Apagar categoria",
+  confirmDeleteCategoryTitle: "Apagar categoria?",
+  confirmDeleteCategoryMessage:
+    "As notas desta categoria não serão apagadas. Elas ficarão como sem categoria.",
 };

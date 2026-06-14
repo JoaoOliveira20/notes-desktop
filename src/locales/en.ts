@@ -40,4 +40,14 @@ export const en = {
   confirmDeleteSelectedTitle: "Delete selected notes?",
   confirmDeleteSelectedMessage:
     "This action will permanently delete the selected notes. This cannot be undone.",
+  categories: "Categories",
+  allNotes: "All",
+  uncategorized: "Uncategorized",
+  newCategory: "New category",
+  createCategory: "Create category",
+  categoryNamePlaceholder: "Category name",
+  deleteCategory: "Delete category",
+  confirmDeleteCategoryTitle: "Delete category?",
+  confirmDeleteCategoryMessage:
+    "Notes in this category will not be deleted. They will become uncategorized.",
 };

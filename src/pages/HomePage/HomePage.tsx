@@ -15,6 +15,7 @@ import { useLanguage } from "../../hooks/useLanguage";
 export function HomePage() {
   const {
     filteredNotes,
+    filteredDeletedNotes,
     deletedNotes,
     search,
     setSearch,
@@ -31,9 +32,13 @@ export function HomePage() {
     togglePin,
     restoreNote,
     emptyTrash,
-    filteredDeletedNotes,
     restoreSelectedNotes,
     permanentlyDeleteSelectedNotes,
+    categories,
+    selectedCategoryId,
+    changeSelectedCategory,
+    createCategory,
+    deleteCategory,
   } = useNotes();
 
   const { theme, toggleTheme } = useTheme();
@@ -48,10 +53,18 @@ export function HomePage() {
   const [isDeleteSelectedModalOpen, setIsDeleteSelectedModalOpen] =
     useState(false);
 
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState<string | null>(
+    null,
+  );
+
   const visibleSelectedNote =
     selectedNote && selectedNote.deleted === (viewMode === "trash")
       ? selectedNote
       : null;
+
+  const categoryToDelete = categories.find(
+    (category) => category.id === categoryIdToDelete,
+  );
 
   function handleCreateNote() {
     setViewMode("notes");
@@ -124,6 +137,11 @@ export function HomePage() {
 
           setIsDeleteSelectedModalOpen(true);
         }}
+        categories={categories}
+        selectedCategoryId={selectedCategoryId}
+        onChangeSelectedCategory={changeSelectedCategory}
+        onCreateCategory={createCategory}
+        onRequestDeleteCategory={setCategoryIdToDelete}
         t={t}
       />
 
@@ -206,6 +224,27 @@ export function HomePage() {
         onConfirm={() => {
           handlePermanentlyDeleteSelectedNotes();
           setIsDeleteSelectedModalOpen(false);
+        }}
+      />
+
+      <ConfirmModal
+        isOpen={categoryIdToDelete !== null}
+        title={t.confirmDeleteCategoryTitle}
+        message={
+          categoryToDelete
+            ? `${t.confirmDeleteCategoryMessage} (${categoryToDelete.name})`
+            : t.confirmDeleteCategoryMessage
+        }
+        confirmLabel={t.deleteCategory}
+        cancelLabel={t.cancel}
+        onCancel={() => setCategoryIdToDelete(null)}
+        onConfirm={() => {
+          if (!categoryIdToDelete) {
+            return;
+          }
+
+          deleteCategory(categoryIdToDelete);
+          setCategoryIdToDelete(null);
         }}
       />
     </div>

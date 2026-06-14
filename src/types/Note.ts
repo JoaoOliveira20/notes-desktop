@@ -6,4 +6,5 @@ export type Note = {
   updatedAt: string;
   pinned: boolean;
   deleted: boolean;
+  categoryId: string | null;
 };

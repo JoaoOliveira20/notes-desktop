@@ -3,6 +3,9 @@ import type { Note } from "../../types/Note";
 import { NoteList } from "../NoteList/NoteList";
 import type { ptBR } from "../../locales/pt-BR";
 import type { ViewMode } from "../../types/ViewMode";
+import type { Category } from "../../types/Category";
+import type { SelectedCategoryId } from "../../types/SelectedCategoryId";
+import { useState } from "react";
 
 type Translations = typeof ptBR;
 
@@ -25,6 +28,11 @@ type SidebarProps = {
   onClearTrashSelection: () => void;
   onRestoreSelectedNotes: () => void;
   onPermanentlyDeleteSelectedNotes: () => void;
+  categories: Category[];
+  selectedCategoryId: SelectedCategoryId;
+  onChangeSelectedCategory: (categoryId: SelectedCategoryId) => void;
+  onCreateCategory: (name: string) => void;
+  onRequestDeleteCategory: (categoryId: string) => void;
 };
 
 export function Sidebar({
@@ -46,7 +54,19 @@ export function Sidebar({
   onClearTrashSelection,
   onRestoreSelectedNotes,
   onPermanentlyDeleteSelectedNotes,
+  categories,
+  selectedCategoryId,
+  onChangeSelectedCategory,
+  onCreateCategory,
+  onRequestDeleteCategory,
 }: SidebarProps) {
+  const [newCategoryName, setNewCategoryName] = useState("");
+
+  function handleCreateCategory() {
+    onCreateCategory(newCategoryName);
+    setNewCategoryName("");
+  }
+
   return (
     <aside className="sidebar">
       <h1 className="sidebar-title">{t.appName}</h1>
@@ -74,6 +94,78 @@ export function Sidebar({
           {t.trash}
         </button>
       </div>
+
+      {viewMode === "notes" && (
+        <div className="sidebar-categories">
+          <h2 className="sidebar-section-title">{t.categories}</h2>
+
+          <button
+            className={
+              selectedCategoryId === "all"
+                ? "sidebar-category-button active"
+                : "sidebar-category-button"
+            }
+            onClick={() => onChangeSelectedCategory("all")}
+          >
+            {t.allNotes}
+          </button>
+
+          <button
+            className={
+              selectedCategoryId === null
+                ? "sidebar-category-button active"
+                : "sidebar-category-button"
+            }
+            onClick={() => onChangeSelectedCategory(null)}
+          >
+            {t.uncategorized}
+          </button>
+
+          {categories.map((category) => (
+            <div key={category.id} className="sidebar-category-row">
+              <button
+                className={
+                  selectedCategoryId === category.id
+                    ? "sidebar-category-button active"
+                    : "sidebar-category-button"
+                }
+                onClick={() => onChangeSelectedCategory(category.id)}
+              >
+                {category.name}
+              </button>
+
+              <button
+                className="sidebar-category-delete-button"
+                onClick={() => onRequestDeleteCategory(category.id)}
+                title={t.deleteCategory}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+
+          <div className="sidebar-new-category">
+            <input
+              className="sidebar-category-input"
+              placeholder={t.categoryNamePlaceholder}
+              value={newCategoryName}
+              onChange={(event) => setNewCategoryName(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleCreateCategory();
+                }
+              }}
+            />
+
+            <button
+              className="sidebar-small-button"
+              onClick={handleCreateCategory}
+            >
+              {t.createCategory}
+            </button>
+          </div>
+        </div>
+      )}
 
       {viewMode === "trash" && (
         <button

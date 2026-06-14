@@ -3,11 +3,11 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("electronAPI", {
   getAppVersion: () => ipcRenderer.invoke("app:get-version"),
 
-  loadNotes: () => ipcRenderer.invoke("notes:load"),
+  loadNotesData: () => ipcRenderer.invoke("notes-data:load"),
 
-  saveNotes: (notes) => ipcRenderer.invoke("notes:save", notes),
+  saveNotesData: (data) => ipcRenderer.invoke("notes-data:save", data),
 
-  exportNotes: (notes) => ipcRenderer.invoke("notes:export", notes),
+  exportNotesData: (data) => ipcRenderer.invoke("notes-data:export", data),
 
-  importNotes: () => ipcRenderer.invoke("notes:import"),
+  importNotesData: () => ipcRenderer.invoke("notes-data:import"),
 });

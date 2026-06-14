@@ -19,31 +19,54 @@ function createWindow() {
   }
 }
 
+function getNotesDataFilePath() {
+  return path.join(app.getPath("userData"), "notes-data.json");
+}
+
+function createEmptyNotesData() {
+  return {
+    notes: [],
+    categories: [],
+  };
+}
+
 ipcMain.handle("app:get-version", () => {
   return app.getVersion();
 });
 
-ipcMain.handle("notes:load", async () => {
-  const filePath = path.join(app.getPath("userData"), "notes.json");
+ipcMain.handle("notes-data:load", async () => {
+  const filePath = getNotesDataFilePath();
 
   try {
     const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
+    const parsedData = JSON.parse(data);
+
+    return {
+      notes: Array.isArray(parsedData.notes) ? parsedData.notes : [],
+      categories: Array.isArray(parsedData.categories)
+        ? parsedData.categories
+        : [],
+    };
   } catch {
-    return [];
+    return createEmptyNotesData();
   }
 });
 
-ipcMain.handle("notes:save", async (_event, notes) => {
-  const filePath = path.join(app.getPath("userData"), "notes.json");
+ipcMain.handle("notes-data:save", async (_event, data) => {
+  const filePath = getNotesDataFilePath();
 
-  await fs.writeFile(filePath, JSON.stringify(notes, null, 2), "utf-8");
+  const safeData = {
+    notes: Array.isArray(data.notes) ? data.notes : [],
+    categories: Array.isArray(data.categories) ? data.categories : [],
+  };
+
+  await fs.writeFile(filePath, JSON.stringify(safeData, null, 2), "utf-8");
 });
 
-ipcMain.handle("notes:export", async (_event, notes) => {
+ipcMain.handle("notes-data:export", async (_event, data) => {
   const result = await dialog.showSaveDialog({
     title: "Exportar backup de notas",
-    defaultPath: "notes-backup.json",
+    defaultPath: "notes-desktop-backup.json",
     filters: [
       {
         name: "JSON",
@@ -56,10 +79,19 @@ ipcMain.handle("notes:export", async (_event, notes) => {
     return;
   }
 
-  await fs.writeFile(result.filePath, JSON.stringify(notes, null, 2), "utf-8");
+  const safeData = {
+    notes: Array.isArray(data.notes) ? data.notes : [],
+    categories: Array.isArray(data.categories) ? data.categories : [],
+  };
+
+  await fs.writeFile(
+    result.filePath,
+    JSON.stringify(safeData, null, 2),
+    "utf-8"
+  );
 });
 
-ipcMain.handle("notes:import", async () => {
+ipcMain.handle("notes-data:import", async () => {
   const result = await dialog.showOpenDialog({
     title: "Importar backup de notas",
     filters: [
@@ -77,8 +109,14 @@ ipcMain.handle("notes:import", async () => {
 
   const filePath = result.filePaths[0];
   const data = await fs.readFile(filePath, "utf-8");
+  const parsedData = JSON.parse(data);
 
-  return JSON.parse(data);
+  return {
+    notes: Array.isArray(parsedData.notes) ? parsedData.notes : [],
+    categories: Array.isArray(parsedData.categories)
+      ? parsedData.categories
+      : [],
+  };
 });
 
 app.whenReady().then(() => {
