@@ -201,3 +201,9 @@
 .sidebar-category-delete-button:hover {
   background: var(--danger-hover);
 }
+
+.sidebar-tags-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

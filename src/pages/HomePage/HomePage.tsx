@@ -40,6 +40,12 @@ export function HomePage() {
     createCategory,
     deleteCategory,
     updateNoteCategory,
+    tags,
+    createTag,
+    deleteTag,
+    toggleTagOnSelectedNote,
+    selectedTagId,
+    changeSelectedTag,
   } = useNotes();
 
   const { theme, toggleTheme } = useTheme();
@@ -48,6 +54,7 @@ export function HomePage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("notes");
   const [isEmptyTrashModalOpen, setIsEmptyTrashModalOpen] = useState(false);
+  const [tagIdToDelete, setTagIdToDelete] = useState<string | null>(null);
   const [selectedTrashNoteIds, setSelectedTrashNoteIds] = useState<string[]>(
     [],
   );
@@ -66,6 +73,8 @@ export function HomePage() {
   const categoryToDelete = categories.find(
     (category) => category.id === categoryIdToDelete,
   );
+
+  const tagToDelete = tags.find((tag) => tag.id === tagIdToDelete);
 
   function handleCreateNote() {
     setViewMode("notes");
@@ -143,6 +152,9 @@ export function HomePage() {
         onChangeSelectedCategory={changeSelectedCategory}
         onCreateCategory={createCategory}
         onRequestDeleteCategory={setCategoryIdToDelete}
+        tags={tags}
+        selectedTagId={selectedTagId}
+        onChangeSelectedTag={changeSelectedTag}
         t={t}
       />
 
@@ -151,9 +163,13 @@ export function HomePage() {
           selectedNote={visibleSelectedNote}
           viewMode={viewMode}
           categories={categories}
+          tags={tags}
           onUpdateTitle={updateTitle}
           onUpdateContent={updateContent}
           onUpdateCategory={updateNoteCategory}
+          onCreateTag={createTag}
+          onToggleTag={toggleTagOnSelectedNote}
+          onRequestDeleteTag={setTagIdToDelete}
           onDeleteNote={() => setIsDeleteModalOpen(true)}
           onTogglePin={togglePin}
           onRestoreNote={handleRestoreNote}
@@ -248,6 +264,27 @@ export function HomePage() {
 
           deleteCategory(categoryIdToDelete);
           setCategoryIdToDelete(null);
+        }}
+      />
+
+      <ConfirmModal
+        isOpen={tagIdToDelete !== null}
+        title={t.confirmDeleteTagTitle}
+        message={
+          tagToDelete
+            ? `${t.confirmDeleteTagMessage} (${tagToDelete.name})`
+            : t.confirmDeleteTagMessage
+        }
+        confirmLabel={t.deleteTag}
+        cancelLabel={t.cancel}
+        onCancel={() => setTagIdToDelete(null)}
+        onConfirm={() => {
+          if (!tagIdToDelete) {
+            return;
+          }
+
+          deleteTag(tagIdToDelete);
+          setTagIdToDelete(null);
         }}
       />
     </div>

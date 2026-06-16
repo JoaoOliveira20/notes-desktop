@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./Sidebar.css";
 import type { Note } from "../../types/Note";
 import { NoteList } from "../NoteList/NoteList";
@@ -5,7 +6,8 @@ import type { ptBR } from "../../locales/pt-BR";
 import type { ViewMode } from "../../types/ViewMode";
 import type { Category } from "../../types/Category";
 import type { SelectedCategoryId } from "../../types/SelectedCategoryId";
-import { useState } from "react";
+import type { Tag } from "../../types/Tag";
+import type { SelectedTagId } from "../../types/SelectedTagId";
 
 type Translations = typeof ptBR;
 
@@ -33,6 +35,9 @@ type SidebarProps = {
   onChangeSelectedCategory: (categoryId: SelectedCategoryId) => void;
   onCreateCategory: (name: string) => void;
   onRequestDeleteCategory: (categoryId: string) => void;
+  tags: Tag[];
+  selectedTagId: SelectedTagId;
+  onChangeSelectedTag: (tagId: SelectedTagId) => void;
 };
 
 export function Sidebar({
@@ -59,6 +64,9 @@ export function Sidebar({
   onChangeSelectedCategory,
   onCreateCategory,
   onRequestDeleteCategory,
+  tags,
+  selectedTagId,
+  onChangeSelectedTag,
 }: SidebarProps) {
   const [newCategoryName, setNewCategoryName] = useState("");
 
@@ -164,6 +172,37 @@ export function Sidebar({
               {t.createCategory}
             </button>
           </div>
+        </div>
+      )}
+
+      {tags.length > 0 && (
+        <div className="sidebar-tags-filter">
+          <h2 className="sidebar-section-title">{t.filterByTags}</h2>
+
+          <button
+            className={
+              selectedTagId === "all"
+                ? "sidebar-category-button active"
+                : "sidebar-category-button"
+            }
+            onClick={() => onChangeSelectedTag("all")}
+          >
+            {t.allTags}
+          </button>
+
+          {tags.map((tag) => (
+            <button
+              key={tag.id}
+              className={
+                selectedTagId === tag.id
+                  ? "sidebar-category-button active"
+                  : "sidebar-category-button"
+              }
+              onClick={() => onChangeSelectedTag(tag.id)}
+            >
+              #{tag.name}
+            </button>
+          ))}
         </div>
       )}
 

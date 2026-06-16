@@ -78,3 +78,77 @@
   background: var(--input-bg);
   color: var(--text-color);
 }
+
+.note-editor-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-editor-tags > label {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.note-editor-tags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.note-editor-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.note-editor-tag-checkbox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--input-bg);
+  color: var(--text-color);
+}
+
+.note-editor-tag-checkbox input {
+  cursor: pointer;
+}
+
+.note-editor-tag-delete-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.note-editor-tag-delete-button:hover {
+  background: var(--danger-hover);
+}
+
+.note-editor-new-tag {
+  display: flex;
+  gap: 8px;
+}
+
+.note-editor-new-tag input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-color);
+}
+
+.note-editor-new-tag button {
+  padding: 10px 12px;
+}

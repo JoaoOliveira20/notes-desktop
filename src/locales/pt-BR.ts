@@ -52,4 +52,14 @@ export const ptBR = {
   confirmDeleteCategoryMessage:
     "As notas desta categoria não serão apagadas. Elas ficarão como sem categoria.",
   category: "Categoria",
+  tags: "Tags",
+  newTag: "Nova tag",
+  createTag: "Criar tag",
+  tagNamePlaceholder: "Nome da tag",
+  deleteTag: "Apagar tag",
+  confirmDeleteTagTitle: "Apagar tag?",
+  confirmDeleteTagMessage:
+    "Esta tag será removida de todas as notas. As notas não serão apagadas.",
+  allTags: "Todas as tags",
+  filterByTags: "Filtrar por tags",
 };

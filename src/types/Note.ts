@@ -7,4 +7,5 @@ export type Note = {
   pinned: boolean;
   deleted: boolean;
   categoryId: string | null;
+  tagIds: string[];
 };

@@ -27,6 +27,7 @@ function createEmptyNotesData() {
   return {
     notes: [],
     categories: [],
+    tags: [],
   };
 }
 
@@ -46,6 +47,7 @@ ipcMain.handle("notes-data:load", async () => {
       categories: Array.isArray(parsedData.categories)
         ? parsedData.categories
         : [],
+      tags: Array.isArray(parsedData.tags) ? parsedData.tags : [],
     };
   } catch {
     return createEmptyNotesData();
@@ -58,6 +60,7 @@ ipcMain.handle("notes-data:save", async (_event, data) => {
   const safeData = {
     notes: Array.isArray(data.notes) ? data.notes : [],
     categories: Array.isArray(data.categories) ? data.categories : [],
+    tags: Array.isArray(data.tags) ? data.tags : [],
   };
 
   await fs.writeFile(filePath, JSON.stringify(safeData, null, 2), "utf-8");
@@ -82,12 +85,13 @@ ipcMain.handle("notes-data:export", async (_event, data) => {
   const safeData = {
     notes: Array.isArray(data.notes) ? data.notes : [],
     categories: Array.isArray(data.categories) ? data.categories : [],
+    tags: Array.isArray(data.tags) ? data.tags : [],
   };
 
   await fs.writeFile(
     result.filePath,
     JSON.stringify(safeData, null, 2),
-    "utf-8"
+    "utf-8",
   );
 });
 
@@ -116,6 +120,7 @@ ipcMain.handle("notes-data:import", async () => {
     categories: Array.isArray(parsedData.categories)
       ? parsedData.categories
       : [],
+    tags: Array.isArray(parsedData.tags) ? parsedData.tags : [],
   };
 });
 

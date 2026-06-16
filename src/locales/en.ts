@@ -51,4 +51,14 @@ export const en = {
   confirmDeleteCategoryMessage:
     "Notes in this category will not be deleted. They will become uncategorized.",
   category: "Category",
+  tags: "Tags",
+  newTag: "New tag",
+  createTag: "Create tag",
+  tagNamePlaceholder: "Tag name",
+  deleteTag: "Delete tag",
+  confirmDeleteTagTitle: "Delete tag?",
+  confirmDeleteTagMessage:
+    "This tag will be removed from all notes. Notes will not be deleted.",
+  allTags: "All tags",
+  filterByTags: "Filter by tags",
 };

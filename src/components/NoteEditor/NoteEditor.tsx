@@ -1,8 +1,10 @@
 import "./NoteEditor.css";
+import { useState } from "react";
 import type { Note } from "../../types/Note";
 import type { ptBR } from "../../locales/pt-BR";
 import type { ViewMode } from "../../types/ViewMode";
 import type { Category } from "../../types/Category";
+import type { Tag } from "../../types/Tag";
 
 type Translations = typeof ptBR;
 
@@ -10,9 +12,13 @@ type NoteEditorProps = {
   selectedNote: Note;
   viewMode: ViewMode;
   categories: Category[];
+  tags: Tag[];
   onUpdateTitle: (title: string) => void;
   onUpdateContent: (content: string) => void;
   onUpdateCategory: (categoryId: string | null) => void;
+  onCreateTag: (name: string) => void;
+  onToggleTag: (tagId: string) => void;
+  onRequestDeleteTag: (tagId: string) => void;
   onDeleteNote: () => void;
   onTogglePin: () => void;
   onRestoreNote: () => void;
@@ -24,13 +30,24 @@ export function NoteEditor({
   onUpdateTitle,
   onUpdateContent,
   onUpdateCategory,
+  onCreateTag,
+  onToggleTag,
+  onRequestDeleteTag,
   onDeleteNote,
   onTogglePin,
   viewMode,
   onRestoreNote,
   categories,
+  tags,
   t,
 }: NoteEditorProps) {
+  const [newTagName, setNewTagName] = useState("");
+
+  function handleCreateTag() {
+    onCreateTag(newTagName);
+    setNewTagName("");
+  }
+
   return (
     <div className="note-editor">
       <input
@@ -60,6 +77,51 @@ export function NoteEditor({
               </option>
             ))}
           </select>
+        </div>
+      )}
+
+      {viewMode === "notes" && (
+        <div className="note-editor-tags">
+          <label>{t.tags}</label>
+
+          <div className="note-editor-tags-list">
+            {tags.map((tag) => (
+              <div key={tag.id} className="note-editor-tag-row">
+                <label className="note-editor-tag-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={selectedNote.tagIds.includes(tag.id)}
+                    onChange={() => onToggleTag(tag.id)}
+                  />
+
+                  <span>{tag.name}</span>
+                </label>
+
+                <button
+                  className="note-editor-tag-delete-button"
+                  onClick={() => onRequestDeleteTag(tag.id)}
+                  title={t.deleteTag}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="note-editor-new-tag">
+            <input
+              value={newTagName}
+              placeholder={t.tagNamePlaceholder}
+              onChange={(event) => setNewTagName(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleCreateTag();
+                }
+              }}
+            />
+
+            <button onClick={handleCreateTag}>{t.createTag}</button>
+          </div>
         </div>
       )}
 
