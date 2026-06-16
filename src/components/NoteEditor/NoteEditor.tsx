@@ -101,8 +101,9 @@ export function NoteEditor({
                   className="note-editor-tag-delete-button"
                   onClick={() => onRequestDeleteTag(tag.id)}
                   title={t.deleteTag}
+                  aria-label={t.deleteTag}
                 >
-                  ×
+                  x
                 </button>
               </div>
             ))}
@@ -120,7 +121,12 @@ export function NoteEditor({
               }}
             />
 
-            <button onClick={handleCreateTag}>{t.createTag}</button>
+            <button
+              className="note-editor-action-button note-editor-compact-button"
+              onClick={handleCreateTag}
+            >
+              {t.createTag}
+            </button>
           </div>
         </div>
       )}
@@ -135,23 +141,25 @@ export function NoteEditor({
       />
 
       {viewMode === "trash" ? (
-        <>
-          <button onClick={onRestoreNote}>{t.restoreNote}</button>
+        <div className="note-editor-actions">
+          <button className="note-editor-action-button" onClick={onRestoreNote}>
+            {t.restoreNote}
+          </button>
 
           <button className="note-editor-delete" onClick={onDeleteNote}>
             {t.deletePermanently}
           </button>
-        </>
+        </div>
       ) : (
-        <>
-          <button onClick={onTogglePin}>
+        <div className="note-editor-actions">
+          <button className="note-editor-action-button" onClick={onTogglePin}>
             {selectedNote.pinned ? t.unpinNote : t.pinNote}
           </button>
 
           <button className="note-editor-delete" onClick={onDeleteNote}>
             {t.moveToTrash}
           </button>
-        </>
+        </div>
       )}
     </div>
   );

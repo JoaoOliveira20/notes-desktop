@@ -1,42 +1,125 @@
 .settings-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  padding: 24px;
+  background: rgba(10, 10, 12, 0.52);
+  backdrop-filter: blur(8px);
 
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 20;
+  animation: modal-overlay-in 140ms ease-out;
 }
 
 .settings-modal {
-  width: 420px;
-  padding: 20px;
-  border-radius: 10px;
+  width: min(460px, 100%);
+  padding: 22px;
+  border-radius: 14px;
 
-  background: var(--bg-main);
-  color: var(--text-main);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-elevated);
+  animation: modal-content-in 160ms ease-out;
 }
 
 .settings-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
 .settings-modal-header h2 {
   margin: 0;
+  font-size: 20px;
+  font-weight: 760;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.settings-modal-header button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.settings-modal-header button:hover {
+  background: var(--item-hover);
+  color: var(--text-primary);
 }
 
 .settings-modal-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .settings-modal-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+  padding: 10px 0;
+  border-top: 1px solid color-mix(in srgb, var(--border-color) 72%, transparent);
+}
+
+.settings-modal-row span {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.settings-modal-row button {
+  min-height: 36px;
+  max-width: 56%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.settings-modal-row button:hover {
+  border-color: color-mix(in srgb, var(--accent-color) 42%, var(--border-color));
+  background: var(--item-hover);
+}
+
+@keyframes modal-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

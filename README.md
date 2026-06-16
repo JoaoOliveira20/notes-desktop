@@ -1,105 +1,331 @@
 # Notes Desktop
 
-A lightweight desktop note-taking application built with React, TypeScript and Electron.
+**Notes Desktop** is a local-first desktop note-taking app built with **React**, **TypeScript**, **Vite** and **Electron**.
 
-Notes Desktop allows users to create, edit, organize and back up notes locally while providing a native desktop experience on Windows.
-
----
-
-# Features
-
-* Create notes
-* Edit note title and content
-* Delete notes
-* Search notes
-* Automatic local persistence
-* Import backups
-* Export backups
-* Native desktop application with Electron
-* Windows executable generation
+The app allows you to create, edit, organize, search, categorize, tag, back up and manage notes completely offline, with local persistence through Electron.
 
 ---
 
-# Technologies
+## Preview
 
-## Frontend
+```md
+## Preview
 
-* React
-* TypeScript
-* Vite
-
-## Desktop
-
-* Electron
-* Electron Builder
-
-## Development Tools
-
-* Git
-* npm
+![Notes Desktop preview](docs/images/preview.png)
 
 ---
 
-# Getting Started
+## Features
 
-## Clone the repository
+### Notes
+
+- Create notes
+- Edit note title
+- Edit note content
+- Search notes
+- Pin and unpin notes
+- Sort notes by last update
+- Show last updated date
+- Empty state when no note is selected
+
+### Trash
+
+- Move notes to trash
+- Restore notes from trash
+- Permanently delete notes
+- Empty trash
+- Confirm destructive actions with modal dialogs
+
+### Multiple Selection in Trash
+
+- Select multiple trashed notes
+- Select all trashed notes
+- Clear selection
+- Restore selected notes
+- Permanently delete selected notes with confirmation
+
+### Categories
+
+- Create categories
+- Filter notes by category
+- Show all notes
+- Show uncategorized notes
+- Assign a category to a note
+- Change a note category from the editor
+- Delete categories
+- Notes from deleted categories become uncategorized
+
+### Tags
+
+- Create tags
+- Add tags to notes
+- Remove tags from notes
+- Delete tags
+- Deleted tags are removed from all notes
+- Filter notes by tag
+
+### Settings
+
+- Toggle light/dark mode
+- Toggle language between PT-BR and EN
+- Import backup
+- Export backup
+
+### Backup
+
+- Export all notes, categories and tags to JSON
+- Import notes, categories and tags from JSON
+- Works fully offline
+
+---
+
+## Local-first
+
+Notes Desktop does not require an internet connection.
+
+All data is stored locally on the user's machine using Electron and the file system.
+
+Current local data format:
+
+```ts
+export type NotesData = {
+  notes: Note[];
+  categories: Category[];
+  tags: Tag[];
+};
+```
+
+Note structure:
+
+```ts
+export type Note = {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  pinned: boolean;
+  deleted: boolean;
+  categoryId: string | null;
+  tagIds: string[];
+};
+```
+
+Category structure:
+
+```ts
+export type Category = {
+  id: string;
+  name: string;
+  createdAt: string;
+};
+```
+
+Tag structure:
+
+```ts
+export type Tag = {
+  id: string;
+  name: string;
+  createdAt: string;
+};
+```
+
+---
+
+## Technologies
+
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- CSS Modules/Component CSS structure
+
+### Desktop
+
+- Electron
+- Electron Builder
+
+### Development
+
+- npm
+- Git
+- ESLint
+
+---
+
+## Project Structure
+
+```text
+src/
+├── components/
+│   ├── EmptyState/
+│   │   ├── EmptyState.tsx
+│   │   └── EmptyState.css
+│   │
+│   ├── Modal/
+│   │   ├── ConfirmModal/
+│   │   │   ├── ConfirmModal.tsx
+│   │   │   └── ConfirmModal.css
+│   │   └── SettingsModal/
+│   │       ├── SettingsModal.tsx
+│   │       └── SettingsModal.css
+│   │
+│   ├── NoteEditor/
+│   │   ├── NoteEditor.tsx
+│   │   └── NoteEditor.css
+│   │
+│   ├── NoteList/
+│   │   ├── NoteList.tsx
+│   │   └── NoteList.css
+│   │
+│   └── Sidebar/
+│       ├── Sidebar.tsx
+│       ├── Sidebar.css
+│       └── components/
+│           ├── SidebarCategories.tsx
+│           ├── SidebarFooter.tsx
+│           ├── SidebarHeader.tsx
+│           ├── SidebarSearch.tsx
+│           ├── SidebarTabs.tsx
+│           ├── SidebarTagsFilter.tsx
+│           └── SidebarTrashActions.tsx
+│
+├── hooks/
+│   ├── useNotes.ts
+│   ├── useTheme.ts
+│   └── useLanguage.ts
+│
+├── locales/
+│   ├── pt-BR.ts
+│   └── en.ts
+│
+├── pages/
+│   └── HomePage/
+│       ├── HomePage.tsx
+│       └── HomePage.css
+│
+└── types/
+    ├── Category.ts
+    ├── Language.ts
+    ├── Note.ts
+    ├── NotesData.ts
+    ├── SelectedCategoryId.ts
+    ├── SelectedTagId.ts
+    ├── Tag.ts
+    ├── Theme.ts
+    └── ViewMode.ts
+```
+
+Electron files:
+
+```text
+electron/
+├── main.cjs
+├── preload.cjs
+└── assets/
+```
+
+Build icons:
+
+```text
+build/
+└── icons/
+    └── icon.ico
+```
+
+---
+
+## Sidebar Architecture
+
+The sidebar is split into smaller components to keep the main `Sidebar.tsx` component easier to read and maintain.
+
+Current sidebar subcomponents:
+
+```text
+Sidebar
+├── SidebarHeader
+├── SidebarTabs
+├── SidebarCategories
+├── SidebarTagsFilter
+├── SidebarTrashActions
+├── SidebarSearch
+├── NoteList
+└── SidebarFooter
+```
+
+Responsibilities:
+
+* `SidebarHeader`: displays the app mark and app name.
+* `SidebarTabs`: switches between Notes and Trash views.
+* `SidebarCategories`: handles category filters, category creation and category deletion request.
+* `SidebarTagsFilter`: handles tag-based note filtering.
+* `SidebarTrashActions`: contains trash actions and multiple-selection actions.
+* `SidebarSearch`: handles the search input.
+* `SidebarFooter`: displays the settings button.
+* `NoteList`: renders the visible notes for the current view.
+
+---
+
+## Getting Started
+
+### Clone the repository
 
 ```bash
 git clone https://github.com/JoaoOliveira20/notes-desktop.git
 cd notes-desktop
 ```
 
-## Install dependencies
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-## Run in development mode
+### Run in development mode
 
 ```bash
 npm run electron:dev
 ```
 
-This command will:
-
-* Start the Vite development server
-* Launch Electron
-* Open the desktop application automatically
+This command starts the Vite development server and opens the Electron desktop app.
 
 ---
 
-# Available Scripts
+## Available Scripts
 
-## Development
-
-```bash
-npm run electron:dev
-```
-
-Runs Vite and Electron together.
-
-## Frontend Only
+### Run Vite only
 
 ```bash
 npm run dev
 ```
 
-Runs only the Vite development server.
+### Run Electron only
 
-## Build Frontend
+```bash
+npm run electron
+```
+
+### Run Vite + Electron
+
+```bash
+npm run electron:dev
+```
+
+### Build frontend
 
 ```bash
 npm run build
 ```
 
-Generates:
+Output:
 
 ```text
 dist/
 ```
 
-## Generate Windows Executable
+### Generate desktop build
 
 ```bash
 npm run dist
@@ -107,17 +333,17 @@ npm run dist
 
 This command:
 
-1. Builds the React application
-2. Packages the Electron application
-3. Generates a Windows installer
+1. Builds the React/Vite app
+2. Packages the Electron app
+3. Generates the final desktop build
 
-Output directory:
+Output:
 
 ```text
 build-release/
 ```
 
-Example:
+Example output on Windows:
 
 ```text
 build-release/
@@ -127,62 +353,116 @@ build-release/
 
 ---
 
-# Local Storage
+## Electron Builder Configuration
 
-Notes are stored locally on the user's machine using Electron and the file system.
+The app uses `electron-builder` with output configured to:
 
-Storage flow:
+```json
+"directories": {
+  "output": "build-release"
+}
+```
+
+Windows icon:
+
+```json
+"win": {
+  "icon": "build/icons/icon.ico",
+  "target": "nsis"
+}
+```
+
+---
+
+## Data and Backup Flow
 
 ```text
 React
  ↓
-electronAPI
+window.electronAPI
+ ↓
+Electron preload
  ↓
 IPC
  ↓
-Electron Main Process
+Electron main process
  ↓
-notes.json
+notes-data.json
 ```
 
-Changes are automatically saved whenever a note is created, edited or deleted.
+Exported backups include:
+
+- notes
+- categories
+- tags
+
+Example backup format:
+
+```json
+{
+  "notes": [],
+  "categories": [],
+  "tags": []
+}
+```
 
 ---
 
-# Backup System
+## Development Notes
 
-## Export Backup
-
-Exports all notes into a JSON file.
-
-Example:
+Generated folders should not be committed:
 
 ```text
-backup.json
+node_modules/
+dist/
+release/
+build-release/
 ```
 
-## Import Backup
+Recommended `.gitignore` entries:
 
-Imports a previously exported JSON backup and restores all notes.
-
----
-
-# Roadmap
-
-* Dark Mode
-* Light Mode
-* Note sorting
-* Creation date
-* Last update date
-* Pinned notes
-* Categories
-* Tags
-* Keyboard shortcuts
-* Cloud synchronization
-* Mobile version
+```gitignore
+node_modules/
+dist/
+release/
+build-release/
+```
 
 ---
 
-# Author
+## Current Version Scope
 
-João Oliveira
+The current version includes the core functionality for a complete local note-taking app:
+
+- Local note management
+- Trash system
+- Categories
+- Tags
+- Filters
+- Backup
+- Theme
+- Language support
+- Desktop build
+
+---
+
+## Future Improvements
+
+Possible future improvements:
+
+- Markdown support
+- Keyboard shortcuts
+- Better note export formats
+- More advanced search
+- Custom sorting
+- Drag and drop
+- Rich text editor
+- Automatic backup location
+- App lock/password protection
+- More themes
+
+---
+
+## Author
+
+Developed by **João Oliveira**.

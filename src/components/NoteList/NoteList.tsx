@@ -25,47 +25,52 @@ export function NoteList({
   t,
 }: NoteListProps) {
   return (
-    <div>
-      {notes.map((note) => (
-        <div
-          key={note.id}
-          onClick={() => onSelectNote(note.id)}
-          className={
-            note.id === selectedNoteId
-              ? "note-list-item note-list-item-active"
-              : note.pinned
-                ? "note-list-item note-list-item-pinned"
-                : "note-list-item"
-          }
-        >
-          {viewMode === "trash" && (
-            <input
-              type="checkbox"
-              className="note-list-checkbox"
-              checked={selectedTrashNoteIds.includes(note.id)}
-              onChange={(event) => {
-                event.stopPropagation();
-                onToggleTrashNoteSelection(note.id);
-              }}
-              onClick={(event) => event.stopPropagation()}
-            />
-          )}
+    <div className="note-list">
+      {notes.map((note) => {
+        const noteClassName = [
+          "note-list-item",
+          note.id === selectedNoteId ? "note-list-item-active" : "",
+          note.pinned ? "note-list-item-pinned" : "",
+        ]
+          .filter(Boolean)
+          .join(" ");
 
-          <h3 className="note-list-title">
-            {note.pinned ? "📌 " : ""}
-            {note.title}
-          </h3>
+        return (
+          <div
+            key={note.id}
+            onClick={() => onSelectNote(note.id)}
+            className={noteClassName}
+          >
+            {viewMode === "trash" && (
+              <input
+                type="checkbox"
+                className="note-list-checkbox"
+                checked={selectedTrashNoteIds.includes(note.id)}
+                onChange={(event) => {
+                  event.stopPropagation();
+                  onToggleTrashNoteSelection(note.id);
+                }}
+                onClick={(event) => event.stopPropagation()}
+              />
+            )}
 
-          <p className="note-list-content">
-            {note.content.slice(0, 60)}
-            {note.content.length > 60 ? "..." : ""}
-          </p>
+            <div className="note-list-main">
+              <h3 className="note-list-title">
+                <span>{note.title}</span>
+              </h3>
 
-          <small className="note-list-date">
-            {t.updated} {new Date(note.updatedAt).toLocaleDateString()}
-          </small>
-        </div>
-      ))}
+              <p className="note-list-content">
+                {note.content.slice(0, 60)}
+                {note.content.length > 60 ? "..." : ""}
+              </p>
+
+              <small className="note-list-date">
+                {t.updated} {new Date(note.updatedAt).toLocaleDateString()}
+              </small>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -2,6 +2,13 @@ import { useState } from "react";
 import "./Sidebar.css";
 import type { Note } from "../../types/Note";
 import { NoteList } from "../NoteList/NoteList";
+import { SidebarCategories } from "./components/SidebarCategories";
+import { SidebarFooter } from "./components/SidebarFooter";
+import { SidebarHeader } from "./components/SidebarHeader";
+import { SidebarSearch } from "./components/SidebarSearch";
+import { SidebarTabs } from "./components/SidebarTabs";
+import { SidebarTagsFilter } from "./components/SidebarTagsFilter";
+import { SidebarTrashActions } from "./components/SidebarTrashActions";
 import type { ptBR } from "../../locales/pt-BR";
 import type { ViewMode } from "../../types/ViewMode";
 import type { Category } from "../../types/Category";
@@ -77,193 +84,59 @@ export function Sidebar({
 
   return (
     <aside className="sidebar">
-      <h1 className="sidebar-title">{t.appName}</h1>
+      <SidebarHeader appName={t.appName} />
 
-      <button className="sidebar-button" onClick={onCreateNote}>
+      <button
+        type="button"
+        className="sidebar-button sidebar-primary-button"
+        onClick={onCreateNote}
+      >
         {t.newNote}
       </button>
 
-      <div className="sidebar-tabs">
-        <button
-          className={
-            viewMode === "notes" ? "sidebar-tab active" : "sidebar-tab"
-          }
-          onClick={() => onChangeViewMode("notes")}
-        >
-          {t.notes}
-        </button>
-
-        <button
-          className={
-            viewMode === "trash" ? "sidebar-tab active" : "sidebar-tab"
-          }
-          onClick={() => onChangeViewMode("trash")}
-        >
-          {t.trash}
-        </button>
-      </div>
+      <SidebarTabs
+        viewMode={viewMode}
+        onChangeViewMode={onChangeViewMode}
+        t={t}
+      />
 
       {viewMode === "notes" && (
-        <div className="sidebar-categories">
-          <h2 className="sidebar-section-title">{t.categories}</h2>
-
-          <button
-            className={
-              selectedCategoryId === "all"
-                ? "sidebar-category-button active"
-                : "sidebar-category-button"
-            }
-            onClick={() => onChangeSelectedCategory("all")}
-          >
-            {t.allNotes}
-          </button>
-
-          <button
-            className={
-              selectedCategoryId === null
-                ? "sidebar-category-button active"
-                : "sidebar-category-button"
-            }
-            onClick={() => onChangeSelectedCategory(null)}
-          >
-            {t.uncategorized}
-          </button>
-
-          {categories.map((category) => (
-            <div key={category.id} className="sidebar-category-row">
-              <button
-                className={
-                  selectedCategoryId === category.id
-                    ? "sidebar-category-button active"
-                    : "sidebar-category-button"
-                }
-                onClick={() => onChangeSelectedCategory(category.id)}
-              >
-                {category.name}
-              </button>
-
-              <button
-                className="sidebar-category-delete-button"
-                onClick={() => onRequestDeleteCategory(category.id)}
-                title={t.deleteCategory}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-
-          <div className="sidebar-new-category">
-            <input
-              className="sidebar-category-input"
-              placeholder={t.categoryNamePlaceholder}
-              value={newCategoryName}
-              onChange={(event) => setNewCategoryName(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  handleCreateCategory();
-                }
-              }}
-            />
-
-            <button
-              className="sidebar-small-button"
-              onClick={handleCreateCategory}
-            >
-              {t.createCategory}
-            </button>
-          </div>
-        </div>
+        <SidebarCategories
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          newCategoryName={newCategoryName}
+          onNewCategoryNameChange={setNewCategoryName}
+          onChangeSelectedCategory={onChangeSelectedCategory}
+          onCreateCategory={handleCreateCategory}
+          onRequestDeleteCategory={onRequestDeleteCategory}
+          t={t}
+        />
       )}
 
-      {tags.length > 0 && (
-        <div className="sidebar-tags-filter">
-          <h2 className="sidebar-section-title">{t.filterByTags}</h2>
-
-          <button
-            className={
-              selectedTagId === "all"
-                ? "sidebar-category-button active"
-                : "sidebar-category-button"
-            }
-            onClick={() => onChangeSelectedTag("all")}
-          >
-            {t.allTags}
-          </button>
-
-          {tags.map((tag) => (
-            <button
-              key={tag.id}
-              className={
-                selectedTagId === tag.id
-                  ? "sidebar-category-button active"
-                  : "sidebar-category-button"
-              }
-              onClick={() => onChangeSelectedTag(tag.id)}
-            >
-              #{tag.name}
-            </button>
-          ))}
-        </div>
-      )}
+      <SidebarTagsFilter
+        tags={tags}
+        selectedTagId={selectedTagId}
+        onChangeSelectedTag={onChangeSelectedTag}
+        t={t}
+      />
 
       {viewMode === "trash" && (
-        <button
-          className="sidebar-button sidebar-danger-button"
-          onClick={onEmptyTrash}
-          disabled={!hasDeletedNotes}
-        >
-          {t.emptyTrash}
-        </button>
+        <SidebarTrashActions
+          hasDeletedNotes={hasDeletedNotes}
+          selectedTrashNoteIds={selectedTrashNoteIds}
+          onEmptyTrash={onEmptyTrash}
+          onSelectAllTrashNotes={onSelectAllTrashNotes}
+          onClearTrashSelection={onClearTrashSelection}
+          onRestoreSelectedNotes={onRestoreSelectedNotes}
+          onPermanentlyDeleteSelectedNotes={onPermanentlyDeleteSelectedNotes}
+          t={t}
+        />
       )}
 
-      {viewMode === "trash" && hasDeletedNotes && (
-        <div className="sidebar-trash-actions">
-          <div className="sidebar-trash-selection-actions">
-            <button
-              className="sidebar-small-button"
-              onClick={onSelectAllTrashNotes}
-            >
-              {t.selectAll}
-            </button>
-
-            <button
-              className="sidebar-small-button"
-              onClick={onClearTrashSelection}
-              disabled={selectedTrashNoteIds.length === 0}
-            >
-              {t.clearSelection}
-            </button>
-          </div>
-
-          <button
-            className="sidebar-button"
-            onClick={onRestoreSelectedNotes}
-            disabled={selectedTrashNoteIds.length === 0}
-          >
-            {t.restoreSelected}
-          </button>
-
-          <button
-            className="sidebar-button sidebar-danger-button"
-            onClick={onPermanentlyDeleteSelectedNotes}
-            disabled={selectedTrashNoteIds.length === 0}
-          >
-            {t.deleteSelected}
-          </button>
-
-          {selectedTrashNoteIds.length > 0 && (
-            <small className="sidebar-selected-count">
-              {selectedTrashNoteIds.length} {t.selectedNotes}
-            </small>
-          )}
-        </div>
-      )}
-
-      <input
-        className="sidebar-search"
-        placeholder={t.searchNotes}
+      <SidebarSearch
         value={search}
-        onChange={(event) => onSearchChange(event.target.value)}
+        placeholder={t.searchNotes}
+        onChange={onSearchChange}
       />
 
       <div className="sidebar-list">
@@ -278,9 +151,7 @@ export function Sidebar({
         />
       </div>
 
-      <button className="sidebar-button" onClick={onOpenSettings}>
-        {t.settings}
-      </button>
+      <SidebarFooter settingsLabel={t.settings} onOpenSettings={onOpenSettings} />
     </aside>
   );
 }
