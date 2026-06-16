@@ -8,9 +8,6 @@ The app allows you to create, edit, organize, search, categorize, tag, back up a
 
 ## Preview
 
-```md
-## Preview
-
 ![Notes Desktop preview](docs/images/preview.png)
 
 ---
