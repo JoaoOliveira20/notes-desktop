@@ -47,7 +47,7 @@
       "output": "build-release"
     },
     "win": {
-      "icon": "build/icons/icon.ico",
+      "icon": "electron/assets/icon.png",
       "target": "nsis"
     },
     "linux": {
